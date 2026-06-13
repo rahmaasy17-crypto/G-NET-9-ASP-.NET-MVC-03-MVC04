@@ -11,13 +11,14 @@ namespace GymManagement.DAL.Repositories.interfaces
 {
     public interface IGenaricReposatory<TEntity> where TEntity : BaseEntity , new()
     {
-        Task<IEnumerable<TEntity>> GetAllAsync(bool tracking = false, CancellationToken c = default);
         Task<TEntity?> GetByIDAsync(int id, CancellationToken c = default);
-        Task<int> AddAsync(TEntity entity);
-        Task<int> UpdateAsync(TEntity entity);
+        Task<int> AddAsync(TEntity entity, CancellationToken c = default);
+        Task<int> UpdateAsync(TEntity entity, CancellationToken c = default);
 
-        Task<int> DeleteAsync(TEntity entity);
-         Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate ,CancellationToken c);
+        Task<int> DeleteAsync(TEntity entity, CancellationToken c = default);
+        Task<IEnumerable<TEntity>> GetAllAsync(bool tracking = false, CancellationToken c = default);
+        Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate ,CancellationToken c);
+        Task<TEntity?> FirstOrDefultAsync(Expression<Func<TEntity, bool>> predicate, bool tracking = false, CancellationToken c=default);
     }
 
 }

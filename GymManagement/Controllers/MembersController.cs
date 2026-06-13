@@ -29,11 +29,37 @@ namespace GymManagement.PL.Controllers
         #region MemberDetails
         //MemberDetails(int id)  >for 1 member
         //GET baseurl/Members/MemberDetails/{id} 
+        public async Task<IActionResult> MemberDetails(int id, CancellationToken c)
+        {
+            //get member by id
+            //check if member is null=> return index  with error massage
+            //check if member is not null=> return view data
+            var member=await _memberService.GetMemberDetailsByIdAsync(id,c);
+            if (member == null)
+            {
+                TempData["ErrorMessage"] = "Member Not Found";
+                    return RedirectToAction(nameof(Index));
+            }
+           return View(member);
+        }
         #endregion
 
         #region HealthRecordDetails
         //HealthRecordDetails(int id)   >for HealthRecord Detail for 1 member
         //GET baseurl/Members/HealthRecordDetails/{id} 
+        public async Task<IActionResult> HealthRecordDetails(int id, CancellationToken c)
+        {
+            //get Health Record by member id
+            //check if  Health Record  is null=> return index  with error massage
+            //check if  Health Record  is not null=> return view data
+            var HealthRecord = await _memberService.GetMemberHealthRecordAsync(id,c);
+            if (HealthRecord == null)
+            {
+                TempData["ErrorMessage"] = "Health Record Not Found";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(HealthRecord);
+        }
         #endregion
 
         #region Createing Member > 2 steps
