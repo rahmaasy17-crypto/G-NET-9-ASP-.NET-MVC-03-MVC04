@@ -22,12 +22,14 @@ namespace GymManagement.BLL.Services.Classes
         private readonly IGenaricReposatory<MemberShip> _memberShipReposatory;
         private readonly IGenaricReposatory<Plan>        _planReposatory     ;
         private readonly IGenaricReposatory<HealthRecord> _healthRecordReposatory;
+        private readonly IGenaricReposatory<Booking> _bookingRecordReposatory;
 
-        public MemberService(IGenaricReposatory<Member> memberReposatory,IGenaricReposatory<MemberShip> memberShipReposatory,IGenaricReposatory<Plan> planReposatory, IGenaricReposatory<HealthRecord> healthRecordReposatory) //TO inject repo
+        public MemberService(IGenaricReposatory<Member> memberReposatory,IGenaricReposatory<MemberShip> memberShipReposatory,IGenaricReposatory<Plan> planReposatory, IGenaricReposatory<HealthRecord> healthRecordReposatory,IGenaricReposatory<Booking> bookingRecordReposatory) //TO inject repo
         {
             _memberReposatory = memberReposatory;
             _planReposatory = planReposatory;
             _healthRecordReposatory = healthRecordReposatory;
+            _bookingRecordReposatory = bookingRecordReposatory;
             _memberShipReposatory = memberShipReposatory;
         }
 
@@ -172,5 +174,18 @@ namespace GymManagement.BLL.Services.Classes
         }
 
         #endregion
+        #region Delete
+        public async Task<bool> RemoveMemberAsync(int id, CancellationToken c = default) 
+        {
+        var member=await _memberReposatory.GetByIDAsync(id,c);
+            if (member == null) return false;
+            var hasFutureBooking = await _bookingRecordReposatory.AnyAsync(x => x.MemberId == id && x.Session.StartDate > DateTime.Now,c);
+      if (hasFutureBooking) return false;
+   var result=await   _memberReposatory.DeleteAsync(member,c);
+            return result > 0;
+        
+        }
+        #endregion
+
     }
 }

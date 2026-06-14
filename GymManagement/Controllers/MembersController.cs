@@ -104,29 +104,53 @@ namespace GymManagement.PL.Controllers
         //post baseurl/Members/MemberEdit{Members} 
         [HttpPost]
         //id used to get data to be tracked and then update[MemberToUpdateViewModel doesn't have id so i don't know where i should update]
-       //كدا قدرت احدد يقدر يوصل منين لو وصل من الروت يبقي كان ليه صلاحيه عادي لو لا مجرد ما يكلم الاكشن مش هيوصل للفيو  بتاع الفورم اللي فيها الداتا بتاعه  العضو دا
-        public async Task<IActionResult> EditMember([FromRoute]int id, MemberToUpdateViewModel model, CancellationToken c)
+        //كدا قدرت احدد يقدر يوصل منين لو وصل من الروت يبقي كان ليه صلاحيه عادي لو لا مجرد ما يكلم الاكشن مش هيوصل للفيو  بتاع الفورم اللي فيها الداتا بتاعه  العضو دا
+        public async Task<IActionResult> EditMember([FromRoute] int id, MemberToUpdateViewModel model, CancellationToken c)
         {
             if (!ModelState.IsValid) return View(model);//هيدور علي فيو بنفس اسم الاكشن دا
-        var result=await _memberService.UpdateMemberDetailsAsync(id, model, c);
-            if (result )
-            
+            var result = await _memberService.UpdateMemberDetailsAsync(id, model, c);
+            if (result)
+
                 TempData["successMessage"] = "Member Updated Successfully";
             else
-              TempData["ErrorMessage"] = "Failed to Updated Member";
-        
+                TempData["ErrorMessage"] = "Failed to Updated Member";
+
             return RedirectToAction(nameof(Index));
-            #endregion
-
         }
-            #region DeletingMember > 2 steps
-            //Delete(int id) >show form 
-            //GET baseurl/Members/Delete/{id} 
 
-            //DeleteConfirmed(int id) >subbmit form 
-            //post baseurl/Members/DeleteConfirmed/{id} 
-            #endregion
 
-        
+        #endregion
+
+        #region DeletingMember > 2 steps
+        //Delete(int id) >show form 
+        //GET baseurl/Members/Delete/{id} 
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id,CancellationToken c)
+        { 
+            var member =await _memberService.GetMemberDetailsByIdAsync(id, c);
+            if (member == null)
+            {
+                TempData["ErrorMessage"] = "Member Is Not Found";
+                return RedirectToAction(nameof(Index));//indexلو ملقاش 
+            }
+            return View();//go to DeleteConfirmed
+        }
+        //DeleteConfirmed(int id) >subbmit form 
+        //post baseurl/Members/DeleteConfirmed/{id} 
+        [HttpPost]                                      //route come from request not form or enything alse
+        public async Task<IActionResult> DeleteConfirmed([FromRoute]int id, CancellationToken c)
+        {
+          var result=await  _memberService.RemoveMemberAsync(id, c);
+            if (result) //ف كل الحالات الجزء التاتي لازم يرجع رساله سواء تمام او فشل
+
+                TempData["successMessage"] = "Member Deleted Successfully";
+            else
+                TempData["ErrorMessage"] = "Failed to Delete Member";
+
+            return RedirectToAction(nameof(Index)); //indexكدا كدا هرجع لل
+        }
+        #endregion
+
+
     }
 }
