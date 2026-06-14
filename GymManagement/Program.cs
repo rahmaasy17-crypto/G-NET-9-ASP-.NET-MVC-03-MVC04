@@ -22,7 +22,7 @@ namespace GymManagement
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
                 });
             builder.Services.AddScoped<IMemberService,MemberService>();
-
+            builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
 
             var app = builder.Build();
