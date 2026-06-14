@@ -18,10 +18,10 @@ namespace GymManagement.PL.Controllers
         //Index() >list all members 
         //GET baseurl/Members/Index 
 
-       public async Task<IActionResult> Index(CancellationToken c ) 
-        { 
-            var members= await _memberService.GetAllMemberAsync(c);
-            return  View(members);   
+        public async Task<IActionResult> Index(CancellationToken c)
+        {
+            var members = await _memberService.GetAllMemberAsync(c);
+            return View(members);
         }
 
         #endregion
@@ -34,13 +34,13 @@ namespace GymManagement.PL.Controllers
             //get member by id
             //check if member is null=> return index  with error massage
             //check if member is not null=> return view data
-            var member=await _memberService.GetMemberDetailsByIdAsync(id,c);
+            var member = await _memberService.GetMemberDetailsByIdAsync(id, c);
             if (member == null)
             {
                 TempData["ErrorMessage"] = "Member Not Found";
-                    return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
             }
-           return View(member);
+            return View(member);
         }
         #endregion
 
@@ -52,7 +52,7 @@ namespace GymManagement.PL.Controllers
             //get Health Record by member id
             //check if  Health Record  is null=> return index  with error massage
             //check if  Health Record  is not null=> return view data
-            var HealthRecord = await _memberService.GetMemberHealthRecordAsync(id,c);
+            var HealthRecord = await _memberService.GetMemberHealthRecordAsync(id, c);
             if (HealthRecord == null)
             {
                 TempData["ErrorMessage"] = "Health Record Not Found";
@@ -71,37 +71,62 @@ namespace GymManagement.PL.Controllers
         //CreateMember() >subbmit form 
         //post baseurl/Members/Create{Members} 
         [HttpPost]
-        public async Task<IActionResult> CreateMember(CreateMemberViewModel model,CancellationToken c)
+        public async Task<IActionResult> CreateMember(CreateMemberViewModel model, CancellationToken c)
         {
             //before talking with service [imp even if i di clint side validation because frontand can do inspect and change clint side validation and send request with invalid data]
-            if (!ModelState.IsValid) return View(nameof(Create),model); //ارجع لنفس الفورم ومعاك البيانات والأخطاء]
-           var result=await   _memberService.CreateMemberAsync(model,c);
+            if (!ModelState.IsValid) return View(nameof(Create), model); //ارجع لنفس الفورم ومعاك البيانات والأخطاء]
+            var result = await _memberService.CreateMemberAsync(model, c);
             if (result)
                 TempData["successMessage"] = "Member Created Successfully";
             else
                 TempData["ErrorMessage"] = "Failed to Create Member";
             return RedirectToAction(nameof(Index));//have 2 div depend on result[create or not]
         }
-     
+
         #endregion
 
         #region Editing Member > 2 steps
 
         //MemberEdit(int id >disply edit form (have data)
         //GET baseurl/Members/MemberEdit/{id}
-
+        [HttpGet]
+        public async Task<IActionResult> EditMember(int id, CancellationToken c)
+        {
+            var member = await _memberService.GetMemberToUpdateAsync(id, c);
+            if (member == null)
+            {
+                TempData["ErrorMessage"] = "Member Is Not Found";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(member);
+        }
         //MemberEdit(int id >subbmit form 
         //post baseurl/Members/MemberEdit{Members} 
-        #endregion
+        [HttpPost]
+        //id used to get data to be tracked and then update[MemberToUpdateViewModel doesn't have id so i don't know where i should update]
+       //كدا قدرت احدد يقدر يوصل منين لو وصل من الروت يبقي كان ليه صلاحيه عادي لو لا مجرد ما يكلم الاكشن مش هيوصل للفيو  بتاع الفورم اللي فيها الداتا بتاعه  العضو دا
+        public async Task<IActionResult> EditMember([FromRoute]int id, MemberToUpdateViewModel model, CancellationToken c)
+        {
+            if (!ModelState.IsValid) return View(model);//هيدور علي فيو بنفس اسم الاكشن دا
+        var result=await _memberService.UpdateMemberDetailsAsync(id, model, c);
+            if (result )
+            
+                TempData["successMessage"] = "Member Updated Successfully";
+            else
+              TempData["ErrorMessage"] = "Failed to Updated Member";
+        
+            return RedirectToAction(nameof(Index));
+            #endregion
 
+        }
+            #region DeletingMember > 2 steps
+            //Delete(int id) >show form 
+            //GET baseurl/Members/Delete/{id} 
 
-        #region DeletingMember > 2 steps
-        //Delete(int id) >show form 
-        //GET baseurl/Members/Delete/{id} 
+            //DeleteConfirmed(int id) >subbmit form 
+            //post baseurl/Members/DeleteConfirmed/{id} 
+            #endregion
 
-        //DeleteConfirmed(int id) >subbmit form 
-        //post baseurl/Members/DeleteConfirmed/{id} 
-        #endregion
-
+        
     }
 }

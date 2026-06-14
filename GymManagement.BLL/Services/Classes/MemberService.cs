@@ -90,7 +90,7 @@ namespace GymManagement.BLL.Services.Classes
         {
             var member = await _memberReposatory.GetByIDAsync(id, c);
             if (member == null) return null; //من الاول كدا
-            var model = new MemberViewModel
+            var model = new MemberViewModel()
             {
                 Email=member.Email,
                 Name = member.Name,
@@ -129,6 +129,47 @@ namespace GymManagement.BLL.Services.Classes
             }
         }
 
+
+        #endregion
+        #region Update
+        public async Task<MemberToUpdateViewModel?> GetMemberToUpdateAsync(int memberId, CancellationToken c = default) 
+        {
+            var member = await _memberReposatory.GetByIDAsync(memberId, c);
+            if (member == null) return null; //من الاول كدا
+           else
+                return new MemberToUpdateViewModel()
+            {
+                Email = member.Email,
+                Name = member.Name,
+                Phone = member.Phone,
+                BuildingNumber = member.Address.BuildingNumber,
+               City = member.Address.City,  
+               Photo=member.Photo,
+               Street=member.Address.Street,
+            };
+        }
+        public async Task<bool> UpdateMemberDetailsAsync(int id, MemberToUpdateViewModel model, CancellationToken c = default)
+        {
+            var member = await _memberReposatory.GetByIDAsync(id, c);
+
+            if (member == null) return false;
+
+            var emailExists = await _memberReposatory.AnyAsync(m => m.Email == model.Email && m.Id != id,c);
+            var phoneExists = await _memberReposatory.AnyAsync(m => m.Phone == model.Phone && m.Id != id,c);
+
+            if (emailExists || phoneExists) return false;
+
+            member.Email = model.Email;
+            member.Phone = model.Phone;
+            member.Address.City = model.City;
+            member.Address.BuildingNumber = model.BuildingNumber;
+            member.Address.Street = model.Street;
+            member.UpdatedAt = DateTime.Now;
+
+            var result = await _memberReposatory.UpdateAsync(member, c);
+
+            return result > 0;
+        }
 
         #endregion
     }
