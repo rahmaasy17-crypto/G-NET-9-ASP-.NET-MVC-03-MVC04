@@ -1,5 +1,7 @@
 using GymManagement.BLL.Services.Classes;
 using GymManagement.BLL.Services.Interfaces;
+using GymManagement.BLL.ViewModels.MemberViewModels;
+using GymManagement.BLL.ViewModels.PlanVewModels;
 using GymManagement.DAL.Data.Models;
 using GymManagement.DAL.Repositories.interfaces;
 
@@ -35,6 +37,36 @@ namespace GymManagement.Controllers
             else
                 return View(plan);
         }
+       
+
+    
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id, CancellationToken c)
+        {
+            var member = await _planService.GetPlanToUpdateAsync(id);
+            if (member == null)
+            {
+                TempData["ErrorMessage"] = "Member Is Not Found";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(member);
+        }
       
+        [HttpPost]
+        public async Task<IActionResult> Edit([FromRoute] int id, UpdatePlanViewModel model, CancellationToken c)
+        {
+            if (!ModelState.IsValid) return View(model);
+            var result = await _planService.UpdatePlanAsync(id, model,c);
+            if (result)
+
+                TempData["successMessage"] = "Plan Updated Successfully";
+            else
+                TempData["ErrorMessage"] = "Failed to Updated Plan";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
     }
 }
