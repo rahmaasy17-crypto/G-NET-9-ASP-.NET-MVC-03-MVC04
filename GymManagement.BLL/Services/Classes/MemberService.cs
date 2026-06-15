@@ -28,12 +28,12 @@ namespace GymManagement.BLL.Services.Classes
 
 
         #region index view
-        public async Task<IEnumerable<TrainerViewModel>> GetAllMemberAsync(CancellationToken c = default)
+        public async Task<IEnumerable<MemberViewModel>> GetAllMemberAsync(CancellationToken c = default)
         {
             var members = await _unitOfWork.GetRepository<Member>().GetAllAsync(c: c);
 
             if (!members.Any()) return [];
-            var membersViewModel = members.Select(m => new TrainerViewModel()
+            var membersViewModel = members.Select(m => new MemberViewModel()
             {
                 Email = m.Email,
                 Gender = m.Gender.ToString(),
@@ -82,11 +82,11 @@ namespace GymManagement.BLL.Services.Classes
         #endregion
 
         #region  Get Member Details
-        public async Task<TrainerViewModel?> GetMemberDetailsByIdAsync(int id, CancellationToken c = default)
+        public async Task<MemberViewModel?> GetMemberDetailsByIdAsync(int id, CancellationToken c = default)
         {
             var member = await _unitOfWork.GetRepository<Member>().GetByIDAsync(id, c);
             if (member == null) return null; //من الاول كدا
-            var model = new TrainerViewModel()
+            var model = new MemberViewModel()
             {
                 Email=member.Email,
                 Name = member.Name,
@@ -130,12 +130,12 @@ namespace GymManagement.BLL.Services.Classes
         #endregion
 
         #region Update
-        public async Task<TrainerToUpdateViewModel?> GetMemberToUpdateAsync(int memberId, CancellationToken c = default) 
+        public async Task<MemberToUpdateViewModel?> GetMemberToUpdateAsync(int memberId, CancellationToken c = default) 
         {
             var member = await _unitOfWork.GetRepository<Member>().GetByIDAsync(memberId, c);
             if (member == null) return null; //من الاول كدا
            else
-                return new TrainerToUpdateViewModel()
+                return new MemberToUpdateViewModel()
             {
                 Email = member.Email,
                 Name = member.Name,
@@ -146,7 +146,7 @@ namespace GymManagement.BLL.Services.Classes
                Street=member.Address.Street,
             };
         }
-        public async Task<bool> UpdateMemberDetailsAsync(int id, TrainerToUpdateViewModel model, CancellationToken c = default)
+        public async Task<bool> UpdateMemberDetailsAsync(int id, MemberToUpdateViewModel model, CancellationToken c = default)
         {
             var member = await _unitOfWork.GetRepository<Member>().GetByIDAsync(id, c);
 

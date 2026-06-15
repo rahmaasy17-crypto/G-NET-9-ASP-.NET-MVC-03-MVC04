@@ -19,7 +19,7 @@ namespace GymManagement.DAL.Data.DbContexts
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 
-       public DbSet <Plan> plans { get; set; }
+       public DbSet <Plan> Plans { get; set; }
         public DbSet<Trainer> Trainers { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Member> Members { get; set; }

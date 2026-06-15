@@ -22,9 +22,11 @@ namespace GymManagement.Controllers
     
         public async Task<IActionResult> Index(CancellationToken c)
         {
-            var plans = await _planService.GetAllPlansAsync(c); //no tracking
+            var plans = await _planService.GetAllPlansAsync(c);
             return View(plans);
         }
+
+
         [HttpGet]
         public async Task<IActionResult> Details(int id, CancellationToken c)
         {
@@ -39,17 +41,16 @@ namespace GymManagement.Controllers
         }
        
 
-    
         [HttpGet]
         public async Task<IActionResult> Edit(int id, CancellationToken c)
         {
-            var member = await _planService.GetPlanToUpdateAsync(id);
-            if (member == null)
+            var plan = await _planService.GetPlanToUpdateAsync(id);
+            if (plan == null)
             {
-                TempData["ErrorMessage"] = "Member Is Not Found";
+                TempData["ErrorMessage"] = "Plan Cannot Be Edited";
                 return RedirectToAction(nameof(Index));
             }
-            return View(member);
+            return View(plan);
         }
       
         [HttpPost]
@@ -66,6 +67,20 @@ namespace GymManagement.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> Activete(int id, CancellationToken c) 
+        {
+           
+            var result = await _planService.ToggleActivationAsync(id, c);
+            if (result)
+
+                TempData["successMessage"] = "Plan Status Changed";
+            else
+                TempData["ErrorMessage"] = "Failed to Changed Status";
+
+            return RedirectToAction(nameof(Index));
+        }
 
 
     }

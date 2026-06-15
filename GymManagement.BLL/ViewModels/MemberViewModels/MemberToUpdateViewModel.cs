@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GymManagement.BLL.ViewModels.MemberViewModels
 {
-    public class TrainerToUpdateViewModel
+    public class MemberToUpdateViewModel
     {
         public string? Name { get; set; }
         public string? Photo { get; set; }

@@ -54,16 +54,16 @@ else if (TempData["ErrorMessage"] != null)
                                         <div class="mt-auto">
                                             <div class="d-grid gap-2">
 
-                                    <a asp-action="Details"asp-controller="Plans" asp-route="@plan.Id" class="btn btn-outline btn-sm">
+                                    <a asp-action="Details"asp-controller="Plans" asp-route-id="@plan.Id" class="btn btn-outline btn-sm">
                                                     <i class="bi bi-eye me-1"></i>View Details
                                                 </a>
 
                                                 <div class="d-flex gap-2">
-                                        <a asp-action="Edit" asp-controller="Plans" asp-route=@plan.Id" class="btn btn-outline btn-sm flex-fill">
+                                        <a asp-action="Edit" asp-controller="Plans" asp-route-id="@plan.Id" class="btn btn-outline btn-sm flex-fill">
                                                         <i class="bi bi-pencil me-1"></i>Edit
                                                     </a>
                                                     @*عملتها فورم عشان اتحكم فموع المثود انما فوق ك لينك عادي*@
-                                        <form asp-action="Activete" asp-controller="Plans" asp-route=@plan.Id" method="post" class="flex-fill">
+                                        <form asp-action="Activete" asp-controller="Plans" asp-route-id="@plan.Id" method="post" class="flex-fill">
                                                         @* If Plan is Active put class text-danger if not text-success *@
                                                         <button type="submit" class="btn btn-outline btn-sm w-100 @(plan.IsActive ? "text-danger" : "text-success")">
                                                             @* Display If No Plan is inactive*@

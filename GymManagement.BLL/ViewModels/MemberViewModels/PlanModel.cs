@@ -1,12 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GymManagement.BLL.Services.Classes
+namespace GymManagement.BLL.ViewModels.MemberViewModels
 {
-    public class ITrainerService 
+    internal class PlanModel
     {
     }
 }

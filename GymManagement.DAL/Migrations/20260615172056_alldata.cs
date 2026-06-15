@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace GymManagement.DAL.Data.Migrations
+namespace GymManagement.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class alldata : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,7 +54,7 @@ namespace GymManagement.DAL.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "plans",
+                name: "Plans",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -69,7 +69,7 @@ namespace GymManagement.DAL.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_plans", x => x.Id);
+                    table.PrimaryKey("PK_Plans", x => x.Id);
                     table.CheckConstraint("PlanDurationCheck", "DurationDays Between 1 and 365");
                 });
 
@@ -145,9 +145,9 @@ namespace GymManagement.DAL.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MemberShips_plans_PlanId",
+                        name: "FK_MemberShips_Plans_PlanId",
                         column: x => x.PlanId,
-                        principalTable: "plans",
+                        principalTable: "Plans",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -225,6 +225,17 @@ namespace GymManagement.DAL.Data.Migrations
                     { 5, "CrossFit", null }
                 });
 
+            migrationBuilder.InsertData(
+                table: "Plans",
+                columns: new[] { "Id", "Description", "DurationDays", "IsActive", "Name", "Price", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { 1, "Access to gym equipment during staffed hours", 30, true, "Basic Plan", 300m, null },
+                    { 2, "Includes gym equipment and 2 group classes per week", 60, false, "Standard Plan", 500m, null },
+                    { 3, "Unlimited access to equipment, classes, and sauna", 90, false, "Premium Plan", 900m, null },
+                    { 4, "Full year access with personal trainer sessions", 365, true, "Annual Plan", 3000m, null }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_MemberId",
                 table: "Bookings",
@@ -300,7 +311,7 @@ namespace GymManagement.DAL.Data.Migrations
                 name: "Members");
 
             migrationBuilder.DropTable(
-                name: "plans");
+                name: "Plans");
 
             migrationBuilder.DropTable(
                 name: "Categories");

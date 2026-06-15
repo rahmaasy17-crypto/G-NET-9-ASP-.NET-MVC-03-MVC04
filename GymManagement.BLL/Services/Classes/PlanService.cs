@@ -99,10 +99,25 @@ namespace GymManagement.BLL.Services.Classes
 
         #endregion
         public async Task<bool> ToggleActivationAsync(int planId, CancellationToken c = default)
-        {    
-               throw new NotImplementedException();
-        }
+        {
+            var plan = await _unitOfWork.GetRepository<Plan>().GetByIDAsync(planId, c);
+            var hasActiveMembership = await _unitOfWork.GetRepository<MemberShip>().AnyAsync(p => p.PlanId == planId && p.EndDate > DateTime.Now, c);
+            if (plan == null) return false;
+           if(plan.IsActive && hasActiveMembership) return false;
+         
+             plan.IsActive= !plan.IsActive;
+            plan.UpdatedAt= DateTime.Now;
+            _unitOfWork.GetRepository<Plan>().Update(plan);
+            var result = await _unitOfWork.SaveChangesAsync(c);
+                return result > 0;
+            
 
-       
+
+        }
+        //private async Task<bool> HasActiveMemberShipAsync(int planId, CancellationToken c)
+        //{
+        //    return await _unitOfWork.GetRepository<MemberShip>().AnyAsync(p => p.PlanId == planId && p.EndDate > DateTime.Now, c);
+        //}
+
     }
 }

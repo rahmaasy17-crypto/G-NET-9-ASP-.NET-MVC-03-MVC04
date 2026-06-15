@@ -4,19 +4,16 @@ using GymManagement.DAL.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace GymManagement.DAL.Data.Migrations
+namespace GymManagement.DAL.Migrations
 {
     [DbContext(typeof(GymDbContext))]
-    [Migration("20260610184734_InitialCreate")]
-    partial class InitialCreate
+    partial class GymDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -279,9 +276,51 @@ namespace GymManagement.DAL.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("plans", t =>
+                    b.ToTable("Plans", t =>
                         {
                             t.HasCheckConstraint("PlanDurationCheck", "DurationDays Between 1 and 365");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Access to gym equipment during staffed hours",
+                            DurationDays = 30,
+                            IsActive = true,
+                            Name = "Basic Plan",
+                            Price = 300m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Includes gym equipment and 2 group classes per week",
+                            DurationDays = 60,
+                            IsActive = false,
+                            Name = "Standard Plan",
+                            Price = 500m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Unlimited access to equipment, classes, and sauna",
+                            DurationDays = 90,
+                            IsActive = false,
+                            Name = "Premium Plan",
+                            Price = 900m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Full year access with personal trainer sessions",
+                            DurationDays = 365,
+                            IsActive = true,
+                            Name = "Annual Plan",
+                            Price = 3000m
                         });
                 });
 

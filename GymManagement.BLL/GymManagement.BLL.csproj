@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="ViewModels\HealthRecordViewModels\" />
+    <Folder Include="ViewModels\TrainerViewModels\" />
   </ItemGroup>
 
 </Project>

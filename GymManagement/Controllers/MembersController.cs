@@ -105,7 +105,7 @@ namespace GymManagement.PL.Controllers
         [HttpPost]
         //id used to get data to be tracked and then update[MemberToUpdateViewModel doesn't have id so i don't know where i should update]
         //كدا قدرت احدد يقدر يوصل منين لو وصل من الروت يبقي كان ليه صلاحيه عادي لو لا مجرد ما يكلم الاكشن مش هيوصل للفيو  بتاع الفورم اللي فيها الداتا بتاعه  العضو دا
-        public async Task<IActionResult> EditMember([FromRoute] int id, TrainerToUpdateViewModel model, CancellationToken c)
+        public async Task<IActionResult> EditMember([FromRoute] int id, MemberToUpdateViewModel model, CancellationToken c)
         {
             if (!ModelState.IsValid) return View(model);//هيدور علي فيو بنفس اسم الاكشن دا
             var result = await _memberService.UpdateMemberDetailsAsync(id, model, c);
