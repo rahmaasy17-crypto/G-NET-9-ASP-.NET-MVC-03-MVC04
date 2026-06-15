@@ -11,9 +11,11 @@ using System.Threading.Tasks;
 
 namespace GymManagement.BLL.Services.Classes
 {
+    
     public class PlanService:IPlanService
     {
-        private readonly IUnitOfWork _unitOfWork;
+    
+     private readonly IUnitOfWork _unitOfWork;
 
         public PlanService(IUnitOfWork unitOfWork) //TO inject repo
         {
@@ -65,6 +67,8 @@ namespace GymManagement.BLL.Services.Classes
         {
             var plan = await _unitOfWork.GetRepository<Plan>().GetByIDAsync(planId, c);
             if (plan == null || !plan.IsActive) return null; //من الاول كدا
+            var hasActiveMembership = await _unitOfWork.GetRepository<MemberShip>().AnyAsync(p => p.PlanId == planId && p.EndDate > DateTime.Now,c);
+            if (hasActiveMembership) return null;
             else
                 return new UpdatePlanViewModel()
                 {
@@ -78,25 +82,27 @@ namespace GymManagement.BLL.Services.Classes
         public async Task<bool> UpdatePlanAsync(int planId, UpdatePlanViewModel model, CancellationToken c = default)
         {
             var plan = await _unitOfWork.GetRepository<Plan>().GetByIDAsync(planId, c);
-            if (plan == null || !plan.IsActive) return null;
-        
-            var newplan = new UpdatePlanViewModel()
-            {
-                Price = plan.Price,
-                Description = plan.Description,
-                Duration = plan.DurationDays,
-            };
+            if (plan == null) return false;
+            var hasActiveMembership = await _unitOfWork.GetRepository<MemberShip>().AnyAsync(p => p.PlanId == planId && p.EndDate > DateTime.Now, c);
+            if (hasActiveMembership) return false;
 
-            _unitOfWork.GetRepository<Member>().Update(newplan);
+            plan.DurationDays = model.Duration;
+            plan.Description = model.Description;
+            plan.Price = model.Price;
+            plan.UpdatedAt = DateTime.Now;
+
+            _unitOfWork.GetRepository<Plan>().Update(plan);
             var result = await _unitOfWork.SaveChangesAsync(c);
             return result > 0;
-        } 
+        }
+
+
         #endregion
         public async Task<bool> ToggleActivationAsync(int planId, CancellationToken c = default)
         {    
                throw new NotImplementedException();
-        }    
-             
-      
+        }
+
+       
     }
 }

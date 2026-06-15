@@ -20,16 +20,21 @@ namespace GymManagement.Controllers
     
         public async Task<IActionResult> Index(CancellationToken c)
         {
-            var plans = await _planService.GetAllPlansAsync(c: c); //no tracking
+            var plans = await _planService.GetAllPlansAsync(c); //no tracking
             return View(plans);
         }
-    
-        //public async Task<IActionResult> Details(int id,CancellationToken c)
-        //{
-        //    var plan = await _planService.GetByIDAsync(id,c);
-        //    if (plan is null) return RedirectToAction(nameof(Index));
-        //  else
-        //    return View(plan);
-        //}
+        [HttpGet]
+        public async Task<IActionResult> Details(int id, CancellationToken c)
+        {
+            var plan = await _planService.GetPlanByIdAsync(id);
+            if (plan is null)
+            {
+                TempData["ErrorMessage"] = "Plan Not Found";
+
+                return RedirectToAction(nameof(Index)); }
+            else
+                return View(plan);
+        }
+      
     }
 }
