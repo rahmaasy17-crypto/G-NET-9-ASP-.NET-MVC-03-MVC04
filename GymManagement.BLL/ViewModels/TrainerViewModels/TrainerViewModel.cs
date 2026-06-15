@@ -1,3 +1,4 @@
+using GymManagement.DAL.Data.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +17,11 @@ namespace GymManagement.BLL.ViewModels.TrainerViewModels
 
             public string Phone { get; set; } = null!;
 
-            public string Specialization { get; set; } = null!;
+           public string Specialty { get; set; }
 
         //MemberDetails
-        public string? DateOfBirth { get; set; }
-        public string? Address { get; set; }
+          public string? DateOfBirth { get; set; }
+          public string? Address { get; set; }
 
     }
 }

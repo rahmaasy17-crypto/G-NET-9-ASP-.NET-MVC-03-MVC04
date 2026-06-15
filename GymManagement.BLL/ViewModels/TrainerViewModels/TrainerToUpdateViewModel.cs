@@ -1,3 +1,4 @@
+using GymManagement.DAL.Data.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -44,7 +45,6 @@ namespace GymManagement.BLL.ViewModels.TrainerViewModels
 
      
         [Required(ErrorMessage = "Please select a specialty.")]
-        public int SpecialtyId { get; set; }
-    
-}
+        public Specialty Specialty { get; set; }
+    }
 }

@@ -1,3 +1,4 @@
+using GymManagement.DAL.Data.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -33,7 +34,7 @@ namespace GymManagement.BLL.ViewModels.TrainerViewModels
         public DateOnly DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "Gender is required")]
-        public string Gender { get; set; } = null!;
+        public Gender Gender { get; set; }
 
         // Address Information
 
@@ -54,7 +55,7 @@ namespace GymManagement.BLL.ViewModels.TrainerViewModels
         // Professional Information
 
         [Required(ErrorMessage = "Please select a specialty.")]
-        public int SpecialtyId { get; set; }
+      public Specialty Specialty { get; set; } 
     }
 }
 
