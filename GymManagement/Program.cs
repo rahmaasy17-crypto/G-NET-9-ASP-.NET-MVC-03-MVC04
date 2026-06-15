@@ -22,6 +22,8 @@ namespace GymManagement
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
                 });
             builder.Services.AddScoped<IMemberService,MemberService>();
+            builder.Services.AddScoped<IPlanService, PlanService>();
+
             builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
 
