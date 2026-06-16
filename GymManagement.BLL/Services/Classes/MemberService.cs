@@ -163,7 +163,6 @@ namespace GymManagement.BLL.Services.Classes
             member.Address.BuildingNumber = model.BuildingNumber;
             member.Address.Street = model.Street;
             member.UpdatedAt = DateTime.Now;
-
              _unitOfWork.GetRepository<Member>().Update(member);
             var result =await _unitOfWork.SaveChangesAsync(c);
             return result > 0;

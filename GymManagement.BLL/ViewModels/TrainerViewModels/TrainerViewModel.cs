@@ -10,7 +10,7 @@ namespace GymManagement.BLL.ViewModels.TrainerViewModels
     public class TrainerViewModel
     {
             public int Id { get; set; }
-
+        public string? Photo{ get; set; }
             public string Name { get; set; } = null!;
 
             public string Email { get; set; } = null!;
@@ -20,7 +20,8 @@ namespace GymManagement.BLL.ViewModels.TrainerViewModels
            public string Specialty { get; set; }
 
         //MemberDetails
-          public string? DateOfBirth { get; set; }
+          public string DateOfBirth { get; set; }
+        public string Gender { get; set; }  
           public string? Address { get; set; }
 
     }

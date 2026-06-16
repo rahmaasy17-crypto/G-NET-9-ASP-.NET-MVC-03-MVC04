@@ -35,7 +35,7 @@ namespace GymManagement.PL.Controllers
         public IActionResult Create() => View();
 
         [HttpPost]
-        public async Task<IActionResult> CreateTrainer(CreateTrainerViewModel model, CancellationToken c)
+        public async Task<IActionResult> Create(CreateTrainerViewModel model, CancellationToken c)
         {
             if (!ModelState.IsValid) return View(nameof(Create), model); 
             var result = await _trainerService.CreateTrainerAsync(model, c);
@@ -65,7 +65,6 @@ namespace GymManagement.PL.Controllers
             if (!ModelState.IsValid) return View(model);
             var result = await _trainerService.UpdateTrainerDetailsAsync(id, model, c);
             if (result)
-
                 TempData["successMessage"] = "Trainer Updated Successfully";
             else
                 TempData["ErrorMessage"] = "Failed to Updated Trainer";

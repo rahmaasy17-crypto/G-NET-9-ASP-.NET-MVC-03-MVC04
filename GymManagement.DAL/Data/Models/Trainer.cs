@@ -11,7 +11,7 @@ namespace GymManagement.DAL.Data.Models
     {
         // HireDate = CreatedAt In BaseEntity
 
-        public Specialty Spectatty { get; set; }
+        public Specialties Spectatty { get; set; }
         #region Relationships
         public ICollection<Session> Sessions { get; set; } = default!;
 

@@ -10,14 +10,10 @@ namespace GymManagement.BLL.ViewModels.TrainerViewModels
 {
     public class TrainerToUpdateViewModel
     {
-        public int Id { get; set; }
 
         // Display Only
         public string Name { get; set; } 
-        public DateOnly DateOfBirth { get; set; }
-        public string Gender { get; set; }
-
-
+    
         // Editable
         [Required(ErrorMessage = "Email Is Required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
@@ -45,6 +41,6 @@ namespace GymManagement.BLL.ViewModels.TrainerViewModels
 
      
         [Required(ErrorMessage = "Please select a specialty.")]
-        public Specialty Specialty { get; set; }
+        public Specialties Specialty { get; set; }
     }
 }
