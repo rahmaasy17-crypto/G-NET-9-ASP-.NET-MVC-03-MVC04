@@ -56,7 +56,7 @@ namespace GymManagement.BLL.Services.Classes
                     BuildingNumber = model.BuildingNumber,
                     City = model.City,
                     Street = model.Street,
-                },
+                }
             };
             _unitOfWork.GetRepository<Trainer>().Add(trainer);
             var result = await _unitOfWork.SaveChangesAsync();
@@ -68,40 +68,39 @@ namespace GymManagement.BLL.Services.Classes
         {
             var trainer = await _unitOfWork.GetRepository<Trainer>().GetByIDAsync(TrainerId);
             if (trainer == null) return null;
-            var model = new TrainerViewModel()
+            else
+            return new TrainerViewModel()
             {
                 Name = trainer.Name,
                 Phone = trainer.Phone,
                 Specialty = trainer.Spectatty.ToString(),
                 Email = trainer.Email,
                 DateOfBirth = trainer.DateofBirth.ToShortDateString(),
-                Address = $" {trainer.Address.BuildingNumber}.{trainer.Address.Street}.{trainer.Address.City}"
+                Address = $" {trainer.Address.BuildingNumber} - {trainer.Address.Street} - {trainer.Address.City}"
             };
-            return model;
+             
         }
 
         public async Task<TrainerToUpdateViewModel?> GetTrainerToUpdateAsync(int TrainerId, CancellationToken c = default)
         {
          var model= await _unitOfWork.GetRepository<Trainer>().GetByIDAsync(TrainerId);
             if (model == null) return null;
-            var trainer = new TrainerToUpdateViewModel()
-            {
-                Name = model.Name,
-                Email = model.Email,
-                Gender = model.Gender.ToString(),
-                Phone = model.Phone,
-                Specialty = model.Spectatty,
-                  DateOfBirth =DateOnly.FromDateTime( model.DateofBirth),
-                BuildingNumber = model.Address.BuildingNumber,
-                City = model.Address.City,
-                Street = model.Address.Street
-            };    
-            return trainer;
-        }
+            else
+                return new TrainerToUpdateViewModel()
+                {
+                    Name = model.Name,
+                    Email = model.Email,
+                    Phone = model.Phone,
+                    Specialty = model.Spectatty,
+                    BuildingNumber = model.Address.BuildingNumber,
+                    City = model.Address.City,
+                    Street = model.Address.Street
+                };
+            }    
+   
         public async Task<bool> UpdateTrainerDetailsAsync(int id, TrainerToUpdateViewModel model, CancellationToken c = default)
         {
             var trainer = await _unitOfWork.GetRepository<Trainer>().GetByIDAsync(id, c);
-
             if (trainer == null) return false;
 
             var emailExists = await _unitOfWork.GetRepository<Trainer>().AnyAsync(m => m.Email == model.Email && m.Id != id, c);

@@ -20,6 +20,7 @@ namespace GymManagement.PL.Controllers
             var trainers = await _trainerService.GetAllTrainersAsync(c);
             return View(trainers);
         }
+        [HttpGet]
         public async Task<IActionResult> TrainerDetails(int id, CancellationToken c)
         {
             var trainer = await _trainerService.GetTrainerDetailsByIdAsync(id, c);
@@ -37,13 +38,16 @@ namespace GymManagement.PL.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateTrainerViewModel model, CancellationToken c)
         {
-            if (!ModelState.IsValid) return View(nameof(Create), model); 
+            if (!ModelState.IsValid) return View( model); 
             var result = await _trainerService.CreateTrainerAsync(model, c);
             if (result)
+              { 
                 TempData["successMessage"] = "Trainer Created Successfully";
-            else
+                return RedirectToAction(nameof(Index));
+            }
+           
                 TempData["ErrorMessage"] = "Failed to Create Trainer";
-            return RedirectToAction(nameof(Index));
+            return View(model);
         }
 
       
